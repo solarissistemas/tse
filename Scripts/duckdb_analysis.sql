@@ -229,3 +229,14 @@ SELECT st_point(l.nr_longitude, l.nr_latitude) AS ponto, l.* FROM tse.local l WH
 select d.ano_declarado, count(*) from caged.dest d group by d.ano_declarado order by 1;
 
 
+
+select * from read_csv('D:\dabase_loads\tse_raw\CESP_2t_SP_261020241121\csec_2t_SP_261020241121.csv', header=True);
+
+
+DROP TABLE tse.st_secao;
+DROP TABLE tse.st_contingencia;
+
+SELECT * FROM tse.st_secao ss WHERE ss.cd_municipio = 64777;
+SELECT * FROM tse.st_contingencia sc WHERE sc.cd_municipio = 64777;
+
+
