@@ -240,3 +240,92 @@ SELECT * FROM tse.st_secao ss WHERE ss.cd_municipio = 64777;
 SELECT * FROM tse.st_contingencia sc WHERE sc.cd_municipio = 64777;
 
 
+/*
+ * ===========================================================================================================================================================================================
+ * ===========================================================================================================================================================================================
+ * ===========================================================================================================================================================================================
+ *                                                                         ESTATÍSTICAS DO COMEX
+ * ===========================================================================================================================================================================================
+ * ===========================================================================================================================================================================================
+ * ===========================================================================================================================================================================================
+*/
+
+INSTALL postgres;
+LOAD postgres;
+ATTACH 'dbname=dbtest user=andre host=172.16.48.71 password=y2t1m1j2' AS pg (TYPE postgres);
+show tables;
+
+CREATE OR REPLACE TABLE sdceti03.comex.ncm AS FROM pg.comex.ncm;
+CREATE OR REPLACE TABLE sdceti03.comex.ncmisic AS FROM pg.comex.ncmisic;
+CREATE OR REPLACE TABLE sdceti03.comex.ncmsh AS FROM pg.comex.ncmsh;
+CREATE OR REPLACE TABLE sdceti03.comex.novoproduto AS FROM pg.comex.novoproduto;
+CREATE OR REPLACE TABLE sdceti03.comex.produto_raw AS FROM pg.comex.produto_raw;
+
+DETACH pg;
+
+DESC comex.exportacao;
+
+SELECT * FROM cnae.vw_cnae vc WHERE vc.subclasse = 500201 ;
+SELECT max(mes) FROM comex.exportacao e WHERE ano = 2024;
+SELECT * FROM comex.produto p ;
+
+SELECT p.cod_produto, p.nom_produto, sum(e.vl_fob) FROM comex.exportacao e INNER JOIN comex.produto p ON (e.cod_produto = p.cod_produto) WHERE e.sg_uf_mun = 'SP' GROUP BY p.cod_produto, p.nom_produto ORDER BY 3 DESC;
+
+select * from comex.produto_raw;
+
+select * from  comex.produto_raw where upper(nom_sh4_por) like '%AÇ_CARES%';
+
+select * from comex.ncm where co_ncm like '2506%';
+select * from comex.ncm where upper(no_ncm_por) like 'QUARTZO'
+select * from cnae.vw_cnae where classe = 08991
+
+
+
+--Açúcares
+select * from comex.ncmsh where co_sh4 = '1701';
+select * from comex.ncm where co_sh6 in (select co_sh6 from comex.ncmsh where co_sh4 = '1701');
+select * from comex.ncm where co_ncm like '1701%';
+
+
+select * from cnae.vw_cnae where classe = 07219
+
+
+
+select * from comex.ncm where co_ncm like '2304%';
+SELECT * FROM comex.ncmsh ;
+
+SELECT * FROM cnae.vw_cnae WHERE classe = 10414;
+
+
+SELECT * FROM cnae.vw_cnae WHERE classe = 10520;
+
+SELECT * FROM cnae.vw_cnae WHERE upper(dsc_subclasse) LIKE '%NATA%';
+select * from comex.produto_raw pr where upper(pr.nom_sh4_por) LIKE '%NATA%';
+
+SELECT * FROM comex.ncmsh where upper(no_sh6_por) LIKE '%NATA%';
+select * from comex.ncm where upper(no_ncm_por) LIKE '%NATA%';
+
+select * from comex.ncm WHERE co_ncm like '040291%';
+
+select * from comex.ncm WHERE co_ncm LIKE '%1904%';
+select * from comex.ncm WHERE co_ncm in('09012100', '09012200');
+
+
+
+
+select * from comex.ncm WHERE co_ncm LIKE '%53111%';
+
+SELECT * FROM comex.ncm n WHERE n.co_ncm = '19041000';
+SELECT * FROM comex.produto p  WHERE p.cod_produto = 1904;
+
+
+-- teste 1 prodlist - ok
+SELECT classe, dsc_classe, SUBSTRING(dsc_classe, 6, 7) FROM comex.prodlist WHERE classe <> SUBSTRING(dsc_classe, 6, 7);
+
+
+SELECT * FROM comex.prodlist pl WHERE pl.ncm LIKE '%.%';
+
+UPDATE comex.prodlist SET ncm = replace(ncm, '+', ',') WHERE ncm LIKE '%.%';
+
+
+
